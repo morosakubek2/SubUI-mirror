@@ -167,6 +167,10 @@ class MirrorService: Service() {
             setupMirroring(subDisplay, intent)
         } else {
             logDebug("Mirroring postponed - waiting for flip to close")
+            // Zakończ usługę jeśli klapka otwarta - mirroring tylko przy zamkniętej
+            Toast.makeText(this, "Close the flip cover to start mirroring", Toast.LENGTH_LONG).show()
+            stopSelf()
+            return START_NOT_STICKY
         }
     }
     
@@ -240,14 +244,16 @@ class MirrorService: Service() {
             // Optymalizacja: Użyj flagi VIRTUAL_DISPLAY_FLAG_TRUSTED_ONLY dla lepszej wydajności
             // Dodaj VIRTUAL_DISPLAY_FLAG_OWN_CONTENT_ONLY dla lepszej prywatności
             // Dodaj VIRTUAL_DISPLAY_FLAG_PRESENTATION dla trybu prezentacji
+            val flags = DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR or 
+                        DisplayManager.VIRTUAL_DISPLAY_FLAG_TRUSTED_ONLY or
+                        DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION
+            
             virtualDisplay = mMediaProjection!!.createVirtualDisplay(
                 "cover",
                 targetWidth,
                 targetHeight,
-                dpi = displayMetrics.densityDpi,
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_AUTO_MIRROR or 
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_TRUSTED_ONLY or
-                DisplayManager.VIRTUAL_DISPLAY_FLAG_PRESENTATION,
+                displayMetrics.densityDpi,
+                flags,
                 Surface(surfaceView.surfaceTexture),
                 null,
                 object : VirtualDisplay.Callback() {
