@@ -3,6 +3,13 @@
     package="com.carudibu.android.subuimirror">
 
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PROJECTION" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    
+    <!-- Samsung-specific permissions for cover display detection -->
+    <uses-permission android:name="com.samsung.android.cover.permission.COVER_STATE_CHANGED" />
 
     <queries>
     <intent>
@@ -31,6 +38,17 @@
             android:foregroundServiceType="mediaProjection"
             android:enabled="true"
             android:exported="false" />
+        
+        <!-- Boot receiver for auto-start after reboot -->
+        <receiver 
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>
