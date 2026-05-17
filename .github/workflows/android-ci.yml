@@ -1,10 +1,22 @@
 name: Android CI
 
 on:
-  push:
-    branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
+  workflow_dispatch:  # Ręczne uruchomienie
+    inputs:
+      build_type:
+        description: 'Typ buildu (debug/release)'
+        required: true
+        default: 'both'
+        type: choice
+        options:
+          - debug
+          - release
+          - both
+      sign_apk:
+        description: 'Podpisz APK (wymaga skonfigurowanych Secrets)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   build:
@@ -24,23 +36,73 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
+    - name: Decode Keystore
+      if: ${{ inputs.sign_apk == true && github.event.inputs.build_type != 'debug' }}
+      env:
+        KEYSTORE_B64: ${{ secrets.KEYSTORE_B64 }}
+        KEYSTORE_PATH: /tmp/keystore.jks
+      run: |
+        if [ ! -z "$KEYSTORE_B64" ]; then
+          echo "$KEYSTORE_B64" | base64 -d > $KEYSTORE_PATH
+          echo "Keystore decoded successfully"
+        else
+          echo "Warning: KEYSTORE_B64 secret not set, signing will be skipped"
+        fi
+      
     - name: Build Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == 'both' }}
       run: ./gradlew assembleDebug
       
     - name: Upload Debug APK
+      if: ${{ github.event.inputs.build_type == 'debug' || github.event.inputs.build_type == 'both' }}
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
         path: app/build/outputs/apk/debug/app-debug.apk
         
-    - name: Build Release APK
+    - name: Build Release APK (Unsigned)
+      if: ${{ (github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both') && (inputs.sign_apk != true || secrets.KEYSTORE_B64 == '') }}
       run: ./gradlew assembleRelease
       
+    - name: Build Release APK (Signed)
+      if: ${{ (github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both') && inputs.sign_apk == true && secrets.KEYSTORE_B64 != '' }}
+      env:
+        KEYSTORE_PATH: /tmp/keystore.jks
+        KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+        KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+        KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+      run: |
+        ./gradlew assembleRelease \
+          -Pandroid.injected.signing.store.file=$KEYSTORE_PATH \
+          -Pandroid.injected.signing.store.password=$KEYSTORE_PASSWORD \
+          -Pandroid.injected.signing.key.alias=$KEY_ALIAS \
+          -Pandroid.injected.signing.key.password=$KEY_PASSWORD
+      
     - name: Upload Release APK
+      if: ${{ github.event.inputs.build_type == 'release' || github.event.inputs.build_type == 'both' }}
       uses: actions/upload-artifact@v4
       with:
         name: app-release
-        path: app/build/outputs/apk/release/app-release-unsigned.apk
+        path: app/build/outputs/apk/release/*.apk
+        
+    - name: Generate Keystore (if not provided)
+      if: ${{ inputs.sign_apk == true && secrets.KEYSTORE_B64 == '' }}
+      run: |
+        echo "Generating temporary keystore for testing..."
+        keytool -genkey -v -keystore /tmp/keystore.jks \
+          -alias android \
+          -keyalg RSA -keysize 2048 -validity 10000 \
+          -storepass android \
+          -keypass android \
+          -dname "CN=Test, OU=Test, O=Test, L=Test, ST=Test, C=US"
+        echo "Temporary keystore generated (NOT FOR PRODUCTION!)"
         
     - name: Run tests
       run: ./gradlew test
+      
+    - name: Upload Test Report
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-reports
+        path: app/build/reports/tests/
