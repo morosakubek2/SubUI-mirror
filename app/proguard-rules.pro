@@ -19,3 +19,20 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# Keep Android-specific classes
+-keep class com.carudibu.android.subuimirror.** { *; }
+-keep class * extends android.app.Service
+-keep class * extends android.app.Presentation
+
+# Keep MediaProjection related classes
+-keep class android.media.projection.** { *; }
+-keep class android.hardware.display.** { *; }
+
+# Keep Material components
+-dontwarn com.google.android.material.**
+-keep class com.google.android.material.** { *; }
+
+# Keep AndroidX
+-keep class androidx.** { *; }
+-dontwarn androidx.**

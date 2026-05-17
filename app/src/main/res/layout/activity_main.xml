@@ -155,6 +155,76 @@
                         android:padding="4dp">
 
                         <ImageView
+                            android:id="@+id/auto_rotate_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_baseline_screen_rotation"
+                            app:layout_constraintBottom_toBottomOf="@id/auto_rotate"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/auto_rotate" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Auto-rotate (optional)"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorPrimary"
+                            app:layout_constraintBottom_toBottomOf="@id/auto_rotate"
+                            app:layout_constraintEnd_toStartOf="@id/auto_rotate"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/auto_rotate_icon"
+                            app:layout_constraintTop_toTopOf="@id/auto_rotate" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/auto_rotate"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:showText="false" />
+
+                        <TextView
+                            android:id="@+id/auto_rotate_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Automatically adjust orientation based on phone rotation. DISABLED by default to save battery. Requires service restart to apply."
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/auto_rotate"
+                            tools:layout_editor_absoluteX="12dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:foreground="?selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#e3e3e3"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp">
+
+                        <ImageView
                             android:id="@+id/orientation_icon"
                             android:layout_width="48dp"
                             android:layout_height="wrap_content"
@@ -199,6 +269,150 @@
                             android:text="Change how the cover screen mirror behaves as the main screen rotates."
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintTop_toBottomOf="@id/orientation"
+                            tools:layout_editor_absoluteX="12dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <!-- Good Lock integration switch -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:foreground="?selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#e3e3e3"
+                    app:strokeWidth="1dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:id="@+id/good_lock_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_baseline_settings"
+                            app:layout_constraintBottom_toBottomOf="@id/good_lock"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/good_lock" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Good Lock (optional)"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorPrimary"
+                            app:layout_constraintBottom_toBottomOf="@id/good_lock"
+                            app:layout_constraintEnd_toStartOf="@id/good_lock"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/good_lock_icon"
+                            app:layout_constraintTop_toTopOf="@id/good_lock" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/good_lock"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:showText="false" />
+
+                        <TextView
+                            android:id="@+id/good_lock_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="Samsung Good Lock / MultiStar integration for advanced settings. Optional."
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/good_lock"
+                            tools:layout_editor_absoluteX="12dp" />
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </com.google.android.material.card.MaterialCardView>
+
+                <Space
+                    android:layout_width="match_parent"
+                    android:layout_height="8dp" />
+
+                <!-- Root mode switch for advanced power saving -->
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:foreground="?selectableItemBackground"
+                    app:cardCornerRadius="4dp"
+                    app:cardElevation="0dp"
+                    app:strokeColor="#FFD700"
+                    app:strokeWidth="2dp">
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="4dp">
+
+                        <ImageView
+                            android:id="@+id/root_icon"
+                            android:layout_width="48dp"
+                            android:layout_height="wrap_content"
+                            android:padding="8dp"
+                            android:scaleType="centerCrop"
+                            android:src="@drawable/ic_baseline_warning"
+                            app:layout_constraintBottom_toBottomOf="@id/root_mode"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="@id/root_mode"
+                            app:tint="#FF5722" />
+
+                        <TextView
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:ellipsize="end"
+                            android:maxLines="1"
+                            android:text="Root Mode (Advanced) ⚠️"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                            android:textColor="?android:textColorPrimary"
+                            app:layout_constraintBottom_toBottomOf="@id/root_mode"
+                            app:layout_constraintEnd_toStartOf="@id/root_mode"
+                            app:layout_constraintHorizontal_bias="0"
+                            app:layout_constraintStart_toEndOf="@+id/root_icon"
+                            app:layout_constraintTop_toTopOf="@id/root_mode" />
+
+                        <com.google.android.material.switchmaterial.SwitchMaterial
+                            android:id="@+id/root_mode"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="4dp"
+                            android:paddingTop="4dp"
+                            android:paddingBottom="4dp"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:showText="false" />
+
+                        <TextView
+                            android:id="@+id/root_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="8dp"
+                            android:text="⚠️ REQUIRES ROOT! Enables SUPER power saving: turns OFF main AMOLED display when flip is closed, forces CPU/GPU low-power modes. Without root this option does nothing."
+                            android:textColor="#FF5722"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintTop_toBottomOf="@id/root_mode"
                             tools:layout_editor_absoluteX="12dp" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>

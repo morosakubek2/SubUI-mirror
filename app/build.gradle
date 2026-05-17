@@ -4,22 +4,36 @@ plugins {
 }
 
 android {
-    compileSdk 30
+    compileSdk 35
+    namespace 'com.carudibu.android.subuimirror'
 
     defaultConfig {
         applicationId "com.carudibu.android.subuimirror"
         minSdk 30
-        targetSdk 30
+        targetSdk 35
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        
+        // Specyficzne rozdzielczości dla Samsung Galaxy Z Flip 3
+        // Main display: 2268x1080 (19.5:9)
+        // Cover display: 512x260 (1.97:1 ~ 2:1)
+        buildConfigField "int", "FLIP3_COVER_WIDTH", "512"
+        buildConfigField "int", "FLIP3_COVER_HEIGHT", "260"
+        buildConfigField "int", "FLIP3_MAIN_WIDTH", "1080"
+        buildConfigField "int", "FLIP3_MAIN_HEIGHT", "2268"
     }
 
     buildTypes {
-        release{
-            minifyEnabled false
+        release {
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            debuggable true
         }
     }
     compileOptions {
@@ -29,15 +43,26 @@ android {
     kotlinOptions {
         jvmTarget = '1.8'
     }
+    
+    buildFeatures {
+        buildConfig true
+    }
+    
+    // Optymalizacja: wyłącz niepotrzebne zasoby
+    packagingOptions {
+        resources {
+            excludes += ['META-INF/*.version', 'META-INF/*.kotlin_module']
+        }
+    }
 }
 
 
 dependencies {
-    implementation 'androidx.core:core-ktx:1.6.0'
-    implementation 'androidx.appcompat:appcompat:1.3.1'
-    implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
-    testImplementation 'junit:junit:4.+'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.core:core-ktx:1.15.0'
+    implementation 'androidx.appcompat:appcompat:1.7.0'
+    implementation 'com.google.android.material:material:1.12.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.2.0'
+    testImplementation 'junit:junit:4.13.2'
+    androidTestImplementation 'androidx.test.ext:junit:1.2.1'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.6.1'
 }
